@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador de Emails</title>
+    <style> 
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #000000;
+        color: #ffffff;
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+        line-height: 1.6;
+    }
+     label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+     }
+      textarea, input[type="file"], button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+     button {
+      background: #ff0055;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #dd00e5;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1f1f1f;
+      border-radius: 6px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: #ddd;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Classificador de Emails</h1>
+    </header>
+
+    <main>
+        <form id="form">
+        <label for="Text">Cole o texto do Email:</label>
+        <textarea name="text" id="text" placeholder="Digite ou cole aqui o conteúdo"></textarea>
+
+        <label for="file"> ou envie um arquivo (.txt ou .pdf):</label>
+        <input type="file" name="file" id="file" accept=".txt, .pdf">
+
+        <button type="submit">Enviar</button>
+        </form>
+
+        <section id="output" class="result" style="display: none;"></section>
+    </main>
+
+    <script>
+        const form = document.getElementById('form');
+        form.addEventListener('submit' , async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            try {
+                const res = await fetch('https://teste-auto-u-psi.vercel.app', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                const output = document.getElementById('output');
+                output.style.display = 'block';
+
+            if (res.ok) {
+                output.innerHTML = `<b>Categoria:</b> ${data.category}<br><br>
+                <b> Resposta sugerida:</b><br>
+                <pre>${data.suggested_reply}</pre>`;
+                }
+                else {output.innerHTML = `<span style="color:red">Erro: ${data.error}</span>`;}
+            } catch (error) {
+                document.getElementById("output").innerHTML = `<span style="color:red">Erro de conexão com o servidor</span>`;
+            }
+        });
+    </script>
+</body>
+</html>
