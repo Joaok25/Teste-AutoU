@@ -22,7 +22,7 @@ Teste-AutoU/├── backend/
 ##  Como rodar localmente
 
 
-### 1. Clonar o repositório
+ 1. Clonar o repositório
 ```bash
 git clone https://github.com/Joaok25/Teste-AutoU.git
 cd Teste-AutoU/backend
